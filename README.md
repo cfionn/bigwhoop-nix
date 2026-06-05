@@ -1,0 +1,2 @@
+# bigwhoop-nix
+nixos configuration
