@@ -7,12 +7,12 @@
 
   outputs = { self, nixpkgs, ... }@inputs: {
      nixosConfigurations = {
-	solidus = nixpkgs.lib.nixosSystem {
-	   system = "x86_64-linux"; 
-	   modules = [
-		./configuration.nix
-	   ];
-	};
-     };
-  };
+	      solidus = nixpkgs.lib.nixosSystem {
+	      system = "x86_64-linux"; 
+	      modules = [
+		      ./configuration.nix
+	         ];
+	      };
+      };
+   };
 }
