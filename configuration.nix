@@ -115,6 +115,7 @@
     git
     vscode
 
+    # unstable packages
     # to pull from unstable branch use pkgs-unstable.*package*
   ];
   system.stateVersion = "26.05";
