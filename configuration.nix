@@ -1,7 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running 'nixos-help').
-{ config, pkgs, ... }:
+{ config, pkgs, pkgs-unstable, ... }:
 {
   imports =
     [ # Include the results of the hardware scan.
@@ -114,6 +114,8 @@
   environment.systemPackages = with pkgs; [
     git
     vscode
+
+    # to pull from unstable branch use pkgs-unstable.*package*
   ];
   system.stateVersion = "26.05";
 }
