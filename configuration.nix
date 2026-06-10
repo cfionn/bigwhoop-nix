@@ -23,12 +23,13 @@
   # Use latest kernel.
   # Default Kernels
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  # boot.kernelPackages = pkgs.linuxPackages_lts;
+  boot.kernelPackages = pkgs.linuxPackages_lts;
 
   # Cachy Kernels
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts;
-  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
+  
 
   networking.hostName = "solidus";
   # Enable networking
