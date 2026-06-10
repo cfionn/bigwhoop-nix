@@ -68,6 +68,18 @@
     extraGroups = [ "networkmanager" "wheel" ];
     packages = with pkgs; [];
   };
+
+  # bash aliases
+  programs.bash = {
+    enable = true;
+    shellAliases = {
+      update = "sudo nix-channel --update && sudonixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/";
+      update-dry = "sudo nixos-rebuild dry-build --flake /run/media/fionn/Storage/bigwhoop-nix/";
+      update-boot = "sudo nix-channel --update && sudonixos-rebuild boot --flake /run/media/fionn/Storage/bigwhoop-nix/";
+      upgrade = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/#";
+    };
+  };
+
   # Mount drives
   services.udisks2.enable = true;
   services.gvfs.enable = true;
