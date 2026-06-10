@@ -19,16 +19,20 @@
   # enable flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
+  nix.settings.substituters = [ "https://cache.nixos.org" "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+
   # PICK KERNEL HERE
   # Use latest kernel.
   # Default Kernels
   # boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelPackages = pkgs.linuxPackages_lts;
+  # boot.kernelPackages = pkgs.linuxPackages_lts;
 
   # Cachy Kernels
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts;
-  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
+  
   
 
   networking.hostName = "solidus";
@@ -51,6 +55,10 @@
   };
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+
+  # disable xserver things
+  services.xserver.excludePackages = [ pkgs.xterm ];
+
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
@@ -62,7 +70,7 @@
   # Configure console keymap
   console.keyMap = "uk";
   # Enable CUPS to print documents.
-  services.printing.enable = true;
+  services.printing.enable = false;
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -80,16 +88,20 @@
     packages = with pkgs; [];
   };
 
-  # bash aliases
-  programs.bash = {
+  # enable fish terminal and add some aliases for updating the system
+  programs.fish = {
     enable = true;
     shellAliases = {
       update = "sudo nix-channel --update && sudo nixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/";
       update-dry = "sudo nixos-rebuild dry-build --flake /run/media/fionn/Storage/bigwhoop-nix/";
       update-boot = "sudo nix-channel --update && sudo nixos-rebuild boot --flake /run/media/fionn/Storage/bigwhoop-nix/";
+      upgrade-boot = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild boot --flake /run/media/fionn/Storage/bigwhoop-nix/#";
       upgrade = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/#";
     };
   };
+
+  # use default fish shell
+  users.users."fionn".shell = pkgs.fish;
 
   # Mount drives
   services.udisks2.enable = true;
@@ -118,6 +130,17 @@
       '';
     };
   };
+
+  # remove gnome packages you dinny want
+  environment.gnome.excludePackages = with pkgs; [
+    epiphany # browser
+    gnome-tour
+    gnome-user-docs
+    gnome-music
+    gnome-characters
+    yelp
+  ];
+
   # Install firefox.
   programs.firefox.enable = true;
   # Allow unfree packages
@@ -126,8 +149,31 @@
     git
     vscode
 
+    # gnome extensions
+    gnomeExtensions.appindicator
+    gnomeExtensions.caffeine
+    gnomeExtensions.hot-edge
+    gnomeExtensions.spotify-controller
+    gnomeExtensions.blur-my-shell
+
     # unstable packages
     # to pull from unstable branch use pkgs-unstable.*package*
+    pkgs-unstable.spotify
   ];
+
+  programs.dconf.profiles.user.databases = [{
+    settings = {
+      "org/gnome/shell" = {
+        enabled-extensions = [
+          "appindicatorsupport@rgcjonas.gmail.com"
+          "caffeine@patapon.info"
+          "hotedge@jonathan.jdoda.ca"
+          "spotify-controller@narkagni"
+          "blur-my-shell@aunetx"
+        ];
+      };
+    };
+  }];
+
   system.stateVersion = "26.05";
 }
