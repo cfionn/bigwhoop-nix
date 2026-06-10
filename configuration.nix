@@ -18,8 +18,14 @@
   };
   # enable flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # PICK KERNEL HERE
   # Use latest kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts;
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
+
   networking.hostName = "solidus";
   # Enable networking
   networking.networkmanager.enable = true;
