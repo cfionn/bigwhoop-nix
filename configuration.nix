@@ -260,4 +260,6 @@
 
   # Optimise storage by hard-linking identical files automatically
   nix.settings.auto-optimise-store = true;
+
+  system.stateVersion = "26.05";
 }
