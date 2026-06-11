@@ -22,8 +22,8 @@
   # enable flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  nix.settings.substituters = [ "https://nixos.org" "https://xuyh0120.win" ];
-  nix.settings.trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
+  nix.settings.substituters = [ "https://cache.nixos.org" ];
+  nix.settings.trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" ];
 
   # PICK KERNEL HERE
   # Use latest kernel.
