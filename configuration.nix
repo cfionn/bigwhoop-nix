@@ -93,7 +93,7 @@
   users.users."fionn" = {
     isNormalUser = true;
     description = "fionn";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "libvirtd"];
     packages = with pkgs; [];
   };
 
@@ -101,7 +101,7 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      cleanyoself = "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
+      cleanyoself = "sudo nix-env --delete-generations +3 --profile /nix/var/nix/profiles/system";
       upgrade-boot = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild boot --flake /run/media/fionn/Storage/bigwhoop-nix/#";
       upgrade = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/#";
     };
@@ -147,6 +147,11 @@
     gnome-characters
     yelp
   ];
+
+
+  # setup virtualization 
+  # Enable Libvirtd
+  virtualisation.libvirtd.enable = true;
 
   # Install firefox.
   programs.firefox.enable = true;
@@ -199,6 +204,10 @@
     thunderbird
     discord
     proton-vpn
+
+    # audio stuff
+    audacity
+    ardour
 
     # Web browsers overridden with hardware acceleration flags for chromium codecs
     (brave.override {
