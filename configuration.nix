@@ -32,7 +32,7 @@
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts;
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
-  
+
 
 
   networking.hostName = "solidus";
@@ -161,9 +161,52 @@
     AMD_VULKAN_ICD = "RADV";   # prefer RADV over AMDVLK
   };
 
+  # Steam with Proton support
+  programs.steam = {
+    enable = true;
+    remotePlay.openFirewall = true;
+    dedicatedServer.openFirewall = false;
+    extraCompatPackages = [ pkgs.proton-ge-bin ]; # better Proton for tricky games
+  };
+
+  # GameMode — lets games request higher CPU/GPU priority
+  programs.gamemode.enable = true;
+  # GameScope - enable gamescope compositor - 
+  programs.gamescope.enable = true;
+
+  # Gamepad support
+  hardware.xpadneo.enable = true; # Xbox wireless controllers (BT)
+  services.udev.packages = [ pkgs.game-devices-udev-rules ]; # broad gamepad udev rules
+
+  # enable docker for distro box and other packages such as packet tracer
+  virtualisation.docker.enable = true;
+
   environment.systemPackages = with pkgs; [
+    # tools
     git
     vscode
+    gnome-boxes
+    distrobox
+    distroshelf
+
+    # web tools
+    thunderbird
+    brave
+    discord
+    vivaldi
+    proton-vpn
+
+    
+
+    # gaming tools
+    mangohud              # in-game performance overlay (fps, temps, frametimes)
+    goverlay              # GUI config for MangoHud
+    protontricks          # install Windows dependencies for specific Steam games
+    winetricks            # same but for non-Steam Wine games
+    bottles               # GUI Wine manager for non-Steam games
+    lutris                # game launcher (GOG, Epic, etc)
+    #heroic 		  # heroic launcher
+    protonplus	          # manages steam versions
 
     # vulkan tools
     vulkan-tools
@@ -179,6 +222,8 @@
     # unstable packages
     # to pull from unstable branch use pkgs-unstable.*package*
     pkgs-unstable.spotify
+    pkgs-unstable.bitwarden-desktop
+    pkgs-unstable.heroic
   ];
 
   programs.dconf.profiles.user.databases = [{
