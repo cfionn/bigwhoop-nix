@@ -201,6 +201,7 @@
     distroshelf
     gnome-tweaks
     impression
+    deja-dup
 
     # web tools
     thunderbird
