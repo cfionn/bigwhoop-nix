@@ -33,7 +33,7 @@
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts;
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
   
-  
+
 
   networking.hostName = "solidus";
   # Enable networking
@@ -145,9 +145,29 @@
   programs.firefox.enable = true;
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+
+  # Use unstable mesa for better RDNA1 performance
+  nixpkgs.overlays = [
+    (final: prev: {
+      mesa = pkgs-unstable.mesa;
+      libdrm = pkgs-unstable.libdrm;
+      vulkan-loader = pkgs-unstable.vulkan-loader;
+    })
+  ];
+
+  # RADV performance tweaks for RDNA1
+  environment.sessionVariables = {
+    RADV_PERFTEST = "gpl";     # faster shader compilation, reduces stutter
+    AMD_VULKAN_ICD = "RADV";   # prefer RADV over AMDVLK
+  };
+
   environment.systemPackages = with pkgs; [
     git
     vscode
+
+    # vulkan tools
+    vulkan-tools
+    vulkan-validation-layers
 
     # gnome extensions
     gnomeExtensions.appindicator
