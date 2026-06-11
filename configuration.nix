@@ -199,6 +199,7 @@
     gnome-boxes
     distrobox
     distroshelf
+    gnome-tweaks
 
     # web tools
     thunderbird
