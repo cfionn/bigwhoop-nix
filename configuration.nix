@@ -253,8 +253,12 @@
   programs.dconf.profiles.user.databases = [{
     settings = {
       "org/gnome/shell" = {
+        # Turn off extension version checking globally
+        disable-extension-version-validation = true;
+
+        # Automatically enable your chosen extensions
         enabled-extensions = [
-          "appindicatorsupport@://gmail.com"
+          "appindicatorsupport@rgcjonas.gmail.com" # Fixed the ID here
           "caffeine@patapon.info"
           "hotedge@jonathan.jdoda.ca"
           "spotify-controller@narkagni"
