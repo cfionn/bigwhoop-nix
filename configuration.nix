@@ -92,9 +92,7 @@
   programs.fish = {
     enable = true;
     shellAliases = {
-      update = "sudo nix-channel --update && sudo nixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/";
-      update-dry = "sudo nixos-rebuild dry-build --flake /run/media/fionn/Storage/bigwhoop-nix/";
-      update-boot = "sudo nix-channel --update && sudo nixos-rebuild boot --flake /run/media/fionn/Storage/bigwhoop-nix/";
+      cleanyoself = "sudo nix-env --delete-generations old --profile /nix/var/nix/profiles/system";
       upgrade-boot = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild boot --flake /run/media/fionn/Storage/bigwhoop-nix/#";
       upgrade = "sudo nix flake update --flake /run/media/fionn/Storage/bigwhoop-nix/ && sudo nixos-rebuild switch --flake /run/media/fionn/Storage/bigwhoop-nix/#";
     };
@@ -222,7 +220,6 @@
     # unstable packages
     # to pull from unstable branch use pkgs-unstable.*package*
     pkgs-unstable.spotify
-    pkgs-unstable.bitwarden-desktop
     pkgs-unstable.heroic
   ];
 
@@ -239,6 +236,17 @@
       };
     };
   }];
+
+  # run cleanup and garbage collection 
+    # Automatic Garbage Collection and Store Optimization
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+
+  # Optimise storage by hard-linking identical files automatically
+  nix.settings.auto-optimise-store = true;
 
   system.stateVersion = "26.05";
 }
