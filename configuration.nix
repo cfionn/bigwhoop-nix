@@ -33,8 +33,6 @@
   # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-lts;
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-bore;
 
-
-
   networking.hostName = "solidus";
   # Enable networking
   networking.networkmanager.enable = true;
@@ -144,6 +142,9 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  # Enable Hardware Graphics (VA-API) decoding capabilities for AMD GPU
+  hardware.graphics.enable = true;
+
   # Use unstable mesa for better RDNA1 performance
   nixpkgs.overlays = [
     (final: prev: {
@@ -189,12 +190,24 @@
 
     # web tools
     thunderbird
-    brave
     discord
-    vivaldi
     proton-vpn
 
-    
+    # Web browsers overridden with hardware acceleration flags for chromium codecs
+    (brave.override {
+      commandLineArgs = [
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+      ];
+    })
+    (vivaldi.override {
+      commandLineArgs = [
+        "--enable-features=VaapiVideoDecoder,VaapiVideoEncoder,CanvasOopRasterization"
+        "--ignore-gpu-blocklist"
+        "--enable-zero-copy"
+      ];
+    })
 
     # gaming tools
     mangohud              # in-game performance overlay (fps, temps, frametimes)
@@ -247,6 +260,4 @@
 
   # Optimise storage by hard-linking identical files automatically
   nix.settings.auto-optimise-store = true;
-
-  system.stateVersion = "26.05";
 }
