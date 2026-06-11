@@ -200,6 +200,7 @@
     distrobox
     distroshelf
     gnome-tweaks
+    impression
 
     # web tools
     thunderbird
