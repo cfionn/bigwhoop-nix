@@ -7,19 +7,22 @@
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
     ];
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
   # --- tpm2 stuffy
   boot.initrd.systemd.enable = true;
   boot.initrd.luks.devices."luks-8d4fec51-dfcc-4c14-87bb-baf473ba01f4" = {
     device = "/dev/disk/by-uuid/8d4fec51-dfcc-4c14-87bb-baf473ba01f4";
     crypttabExtraOpts = [ "tpm2-device=auto" ];
   };
+
   # enable flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  nix.settings.substituters = [ "https://cache.nixos.org" "https://attic.xuyh0120.win/lantian" ];
+  nix.settings.substituters = [ "https://nixos.org" "https://xuyh0120.win" ];
   nix.settings.trusted-public-keys = [ "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=" "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
 
   # PICK KERNEL HERE
@@ -36,8 +39,10 @@
   networking.hostName = "solidus";
   # Enable networking
   networking.networkmanager.enable = true;
+
   # Set your time zone.
   time.timeZone = "Europe/London";
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.UTF-8";
   i18n.extraLocaleSettings = {
@@ -51,6 +56,7 @@
     LC_TELEPHONE = "en_GB.UTF-8";
     LC_TIME = "en_GB.UTF-8";
   };
+
   # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -60,15 +66,19 @@
   # Enable the GNOME Desktop Environment.
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
+
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "gb";
     variant = "";
   };
+
   # Configure console keymap
   console.keyMap = "uk";
+
   # Enable CUPS to print documents.
   services.printing.enable = false;
+
   # Enable sound with pipewire.
   services.pulseaudio.enable = false;
   security.rtkit.enable = true;
@@ -78,6 +88,7 @@
     alsa.support32Bit = true;
     pulse.enable = true;
   };
+
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users."fionn" = {
     isNormalUser = true;
@@ -142,17 +153,13 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Enable Hardware Graphics (VA-API) decoding capabilities for AMD GPU
-  hardware.graphics.enable = true;
-
-  # Use unstable mesa for better RDNA1 performance
-  nixpkgs.overlays = [
-    (final: prev: {
-      mesa = pkgs-unstable.mesa;
-      libdrm = pkgs-unstable.libdrm;
-      vulkan-loader = pkgs-unstable.vulkan-loader;
-    })
-  ];
+  # Enable Hardware Graphics (VA-API) with Unstable Mesa safely injected
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+    package = pkgs-unstable.mesa;
+    package32 = pkgs-unstable.pkgsi686Linux.mesa;
+  };
 
   # RADV performance tweaks for RDNA1
   environment.sessionVariables = {
@@ -170,7 +177,7 @@
 
   # GameMode — lets games request higher CPU/GPU priority
   programs.gamemode.enable = true;
-  # GameScope - enable gamescope compositor - 
+  # GameScope - enable gamescope compositor
   programs.gamescope.enable = true;
 
   # Gamepad support
@@ -216,8 +223,7 @@
     winetricks            # same but for non-Steam Wine games
     bottles               # GUI Wine manager for non-Steam games
     lutris                # game launcher (GOG, Epic, etc)
-    #heroic 		  # heroic launcher
-    protonplus	          # manages steam versions
+    protonplus            # manages steam versions
 
     # vulkan tools
     vulkan-tools
@@ -231,7 +237,6 @@
     gnomeExtensions.blur-my-shell
 
     # unstable packages
-    # to pull from unstable branch use pkgs-unstable.*package*
     pkgs-unstable.spotify
     pkgs-unstable.heroic
   ];
@@ -240,7 +245,7 @@
     settings = {
       "org/gnome/shell" = {
         enabled-extensions = [
-          "appindicatorsupport@rgcjonas.gmail.com"
+          "appindicatorsupport@://gmail.com"
           "caffeine@patapon.info"
           "hotedge@jonathan.jdoda.ca"
           "spotify-controller@narkagni"
@@ -250,16 +255,13 @@
     };
   }];
 
-  # run cleanup and garbage collection 
-    # Automatic Garbage Collection and Store Optimization
+  # Automatic Garbage Collection and Store Optimization
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 14d";
+    options = "--delete-older-than 7d";
   };
-
-  # Optimise storage by hard-linking identical files automatically
   nix.settings.auto-optimise-store = true;
 
-  system.stateVersion = "26.05";
+  system.stateVersion = "26.05"; # Kept relative to your flake release target
 }
