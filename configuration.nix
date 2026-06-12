@@ -189,6 +189,10 @@
   hardware.xpadneo.enable = true; # Xbox wireless controllers (BT)
   services.udev.packages = [ pkgs.game-devices-udev-rules ]; # broad gamepad udev rules
 
+  # enable flatpak as a wee gotcha 
+  services.flatpak.enable = true;
+  # add this after - flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
   # enable docker for distro box and other packages such as packet tracer
   virtualisation.docker.enable = true;
 
@@ -252,6 +256,7 @@
     pkgs-unstable.spotify
     pkgs-unstable.heroic
   ];
+
 
   programs.dconf.profiles.user.databases = [{
     settings = {
