@@ -3,9 +3,9 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    #nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
-  outputs = { self, nixpkgs, nixpkgs-unstable, nix-cachyos-kernel, ... }: 
+  outputs = { self, nixpkgs, nixpkgs-unstable, ... }: 
   let
     system = "x86_64-linux";
     pkgs-unstable = import nixpkgs-unstable {
@@ -19,9 +19,9 @@
         inherit system;
         modules = [
           ./configuration.nix
-          {
-            nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned];
-          }
+          #{
+            #nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned];
+          #}
         ];
         specialArgs = {
           inherit pkgs-unstable;
