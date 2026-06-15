@@ -215,6 +215,7 @@
     # audio stuff
     audacity
     ardour
+    shortwave
 
     # Web browsers overridden with hardware acceleration flags for chromium codecs
     (brave.override {
