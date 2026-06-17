@@ -122,10 +122,13 @@
     enable32Bit = true;
   };
 
+
   environment.sessionVariables = {
     RADV_PERFTEST = "gpl";
     AMD_VULKAN_ICD = "RADV";
+    KWIN_EXPLICIT_SYNC = "1"; # if on kernel 6.8+
   };
+
 
   programs.steam = {
     enable = true;
